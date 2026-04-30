@@ -42,9 +42,7 @@ export default async function PersonPage({
   {person.bio}
 </p>
 
-      <p className="mt-4" style={{ whiteSpace: "pre-line" }}>
-        {aiContent}
-      </p>
+    
 
       <div className="mt-4">
         <p>Birth: {person.birth}</p>
