@@ -13,13 +13,9 @@ async function getAIContent(name: string) {
       input: `Write a concise profile of investor ${name}`,
     });
 
-    console.log("AI RESPONSE:", res);
+    console.log("AI OK");
 
-    const content =
-      res.output_text ||
-      res.output?.[0]?.content?.[0]?.text;
-
-    return content || "No AI content returned.";
+    return res.output_text || "No AI content returned.";
   } catch (error) {
     console.error("AI ERROR:", error);
     return "AI content failed to load.";
