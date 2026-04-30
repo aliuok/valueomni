@@ -13,7 +13,11 @@ export const people = [
     id: "buffett",
     name: "Warren Buffett",
     slug: "warren-buffett",
-    bio: "Chairman of Berkshire Hathaway.",
+    bio: `
+    Warren Buffett is one of the most successful investors of all time...
+    Chairman of Berkshire Hathaway...
+    Known for value investing...
+    `,
     birth: "1930",
     nationality: "USA",
     tagIds: ["value-investing"],

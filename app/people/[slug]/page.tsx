@@ -1,26 +1,6 @@
 export const runtime = "nodejs";
 
-import OpenAI from "openai";
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-async function getAIContent(name: string) {
-  try {
-    const res = await client.responses.create({
-      model: "gpt-4o-mini",
-      input: `Write a concise profile of investor ${name}`,
-    });
-
-    console.log("AI OK");
-
-    return res.output_text || "No AI content returned.";
-  } catch (error) {
-    console.error("AI ERROR:", error);
-    return "AI content failed to load.";
-  }
-}
 
 import { videos } from "@/data/videos";
 import { people } from "@/data/people";
@@ -41,7 +21,6 @@ export default async function PersonPage({
     return <div>Not found</div>;
   }
 
-  const aiContent = await getAIContent(person.name);
 
   // ✅ 关键修复：兜底数组
   const personTags = tags.filter((t) =>
@@ -59,6 +38,9 @@ export default async function PersonPage({
   return (
     <main className="p-8">
       <h1 className="text-3xl font-bold">{person.name}</h1>
+      <p className="mt-4" style={{ whiteSpace: "pre-line" }}>
+  {person.bio}
+</p>
 
       <p className="mt-4" style={{ whiteSpace: "pre-line" }}>
         {aiContent}
