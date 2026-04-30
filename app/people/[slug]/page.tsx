@@ -1,20 +1,27 @@
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
 async function getAIContent(name: string) {
-  const res = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-    },
-    body: JSON.stringify({
+  try {
+    const res = await client.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
         {
           role: "user",
-          content: `Write a concise profile of investor ${name}, including biography, investment philosophy, and key ideas.`,
+          content: `Write a concise profile of investor ${name}, including biography, investment philosophy, and key achievements.`,
         },
       ],
-    }),
-  });
+    });
+
+    return res.choices[0].message.content || "No content";
+  } catch (error) {
+    console.error(error);
+    return "AI content failed to load.";
+  }
+}
 
   const data = await res.json();
   return data.choices[0].message.content;
