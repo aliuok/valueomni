@@ -23,8 +23,6 @@ async function getAIContent(name: string) {
   }
 }
 
-  const data = await res.json();
-  return data.choices[0].message.content;
 }
 import { videos } from "@/data/videos";
 import { people } from "@/data/people";
