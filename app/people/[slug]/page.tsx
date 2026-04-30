@@ -1,3 +1,5 @@
+export const runtime = "nodejs";
+
 import OpenAI from "openai";
 
 const client = new OpenAI({
@@ -6,24 +8,24 @@ const client = new OpenAI({
 
 async function getAIContent(name: string) {
   try {
-    const res = await client.chat.completions.create({
+    const res = await client.responses.create({
       model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "user",
-          content: `Write a concise profile of investor ${name}, including biography, investment philosophy, and key achievements.`,
-        },
-      ],
+      input: `Write a concise profile of investor ${name}`,
     });
 
-    return res.choices[0].message.content || "No content";
+    console.log("AI RESPONSE:", res);
+
+    const content =
+      res.output_text ||
+      res.output?.[0]?.content?.[0]?.text;
+
+    return content || "No AI content returned.";
   } catch (error) {
-    console.error(error);
+    console.error("AI ERROR:", error);
     return "AI content failed to load.";
   }
 }
 
-}
 import { videos } from "@/data/videos";
 import { people } from "@/data/people";
 import { tags } from "@/data/tags";
