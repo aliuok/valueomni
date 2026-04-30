@@ -1,3 +1,24 @@
+async function getAIContent(name: string) {
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "user",
+          content: `Write a concise profile of investor ${name}, including biography, investment philosophy, and key ideas.`,
+        },
+      ],
+    }),
+  });
+
+  const data = await res.json();
+  return data.choices[0].message.content;
+}
 import { videos } from "@/data/videos";
 import { people } from "@/data/people";
 import { tags } from "@/data/tags";
@@ -12,6 +33,12 @@ export default async function PersonPage({
   const { slug } = await params;
 
   const person = people.find((p) => p.slug === slug);
+
+    if (!person) {
+    return <div>Not found</div>;
+  }
+
+  const aiContent = await getAIContent(person?.name || slug);
   const personTags = tags.filter((t) =>
   person?.tagIds?.includes(t.id));
 const personVideos = videos.filter((v) => v.personId === person?.id);
@@ -20,15 +47,17 @@ const personConcepts = concepts.filter((c) =>
   person?.conceptIds?.includes(c.id)
 
 );
-  if (!person) {
-    return <div>Not found</div>;
-  }
+
 
   return (
     <main className="p-8">
       <h1 className="text-3xl font-bold">{person.name}</h1>
 
-      <p className="mt-4">{person.bio}</p>
+      <p className="mt-4" style={{ whiteSpace: "pre-line" }}>
+
+  {aiContent}
+
+</p>
 
       <div className="mt-4">
         <p>Birth: {person.birth}</p>
